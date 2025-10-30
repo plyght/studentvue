@@ -12,13 +12,23 @@ A Model Context Protocol (MCP) server that provides AI applications with access 
 
 ## Installation
 
-### Prerequisites
+### Quick Install (Cursor IDE)
+
+[![Add StudentVue MCP server to Cursor](https://img.shields.io/badge/Add%20to-Cursor-blue?style=for-the-badge)](cursor://anysphere.cursor-deeplink/mcp/install?name=studentvue&config=eyJzdHVkZW50dnVlIjp7ImNvbW1hbmQiOiJub2RlIiwiYXJncyI6WyIvcGF0aC90by9zdHVkZW50dnVlL3BhY2thZ2VzL3N0dWRlbnR2dWUtbWNwL2Rpc3QvaW5kZXguanMiXSwiZW52Ijp7IlNUVURFTlRWVUVfUE9SVEFMIjoiaHR0cHM6Ly95b3VyLWRpc3RyaWN0LmVkdXBvaW50LmNvbSIsIlNUVURFTlRWVUVfVVNFUk5BTUUiOiJ5b3VyX3VzZXJuYW1lIiwiU1RVREVOVFZVRV9QQVNTV09SRCI6InlvdXJfcGFzc3dvcmQifX19)
+
+Click the button above to install in Cursor, then update with your credentials.
+
+**For complete installation instructions, see [INSTALL.md](./INSTALL.md)**
+
+### Manual Setup
+
+#### Prerequisites
 
 - Node.js 18.0.0 or higher
 - Bun (for development and building)
 - Valid StudentVue account credentials
 
-### Setup
+#### Build Steps
 
 1. Install dependencies:
 
@@ -27,66 +37,27 @@ cd packages/studentvue-mcp
 bun install
 ```
 
-2. Create a `.env` file with your credentials:
-
-```bash
-STUDENTVUE_PORTAL=https://your-district.edupoint.com
-STUDENTVUE_USERNAME=your_username
-STUDENTVUE_PASSWORD=your_password
-```
-
-3. Build the server:
+2. Build the server:
 
 ```bash
 bun run build
 ```
 
+3. Configure with your AI application (see [INSTALL.md](./INSTALL.md) for details)
+
 ## Usage
 
-### Running the Server
+### Configuration
 
-The MCP server communicates via stdio and is designed to be used by MCP-compatible AI applications:
+See [INSTALL.md](./INSTALL.md) for complete installation and configuration instructions for:
+- Claude Desktop
+- Cursor IDE
+- Other MCP-compatible applications
+
+### Running in Development
 
 ```bash
 bun run dev
-```
-
-### Configuring with Claude Desktop
-
-Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
-
-```json
-{
-  "mcpServers": {
-    "studentvue": {
-      "command": "node",
-      "args": ["/path/to/studentvue/packages/studentvue-mcp/dist/index.js"],
-      "env": {
-        "STUDENTVUE_PORTAL": "https://your-district.edupoint.com",
-        "STUDENTVUE_USERNAME": "your_username",
-        "STUDENTVUE_PASSWORD": "your_password"
-      }
-    }
-  }
-}
-```
-
-Or using Bun:
-
-```json
-{
-  "mcpServers": {
-    "studentvue": {
-      "command": "bun",
-      "args": ["run", "/path/to/studentvue/packages/studentvue-mcp/src/index.ts"],
-      "env": {
-        "STUDENTVUE_PORTAL": "https://your-district.edupoint.com",
-        "STUDENTVUE_USERNAME": "your_username",
-        "STUDENTVUE_PASSWORD": "your_password"
-      }
-    }
-  }
-}
 ```
 
 ## Available Tools

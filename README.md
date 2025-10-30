@@ -62,29 +62,19 @@ async fn main() -> Result<()> {
 
 ### MCP Server
 
+#### Quick Install for Cursor
+
+[![Add StudentVue MCP server to Cursor](https://img.shields.io/badge/Add%20to-Cursor-blue?style=flat-square)](cursor://anysphere.cursor-deeplink/mcp/install?name=studentvue&config=eyJzdHVkZW50dnVlIjp7ImNvbW1hbmQiOiJub2RlIiwiYXJncyI6WyIvcGF0aC90by9zdHVkZW50dnVlL3BhY2thZ2VzL3N0dWRlbnR2dWUtbWNwL2Rpc3QvaW5kZXguanMiXSwiZW52Ijp7IlNUVURFTlRWVUVfUE9SVEFMIjoiaHR0cHM6Ly95b3VyLWRpc3RyaWN0LmVkdXBvaW50LmNvbSIsIlNUVURFTlRWVUVfVVNFUk5BTUUiOiJ5b3VyX3VzZXJuYW1lIiwiU1RVREVOVFZVRV9QQVNTV09SRCI6InlvdXJfcGFzc3dvcmQifX19)
+
+#### Manual Installation
+
 ```bash
 cd packages/studentvue-mcp
 bun install
 bun run build
 ```
 
-Configure with Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):
-
-```json
-{
-  "mcpServers": {
-    "studentvue": {
-      "command": "node",
-      "args": ["/path/to/studentvue/packages/studentvue-mcp/dist/index.js"],
-      "env": {
-        "STUDENTVUE_PORTAL": "https://your-district.edupoint.com",
-        "STUDENTVUE_USERNAME": "your_username",
-        "STUDENTVUE_PASSWORD": "your_password"
-      }
-    }
-  }
-}
-```
+See [packages/studentvue-mcp/INSTALL.md](./packages/studentvue-mcp/INSTALL.md) for complete installation instructions for Claude Desktop, Cursor, and other MCP clients.
 
 ## Available API Methods
 

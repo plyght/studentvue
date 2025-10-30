@@ -13,6 +13,7 @@ Welcome to the StudentVue Monorepo documentation.
 
 - [Rust API Library](../packages/studentvue-api/README.md) - Native Rust client library
 - [MCP Server](../packages/studentvue-mcp/README.md) - AI integration via MCP protocol
+- [MCP Installation Guide](../packages/studentvue-mcp/INSTALL.md) - Detailed installation instructions
 
 ### Contributing
 
