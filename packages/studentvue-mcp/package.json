@@ -1,0 +1,43 @@
+{
+  "name": "@studentvue/mcp-server",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for StudentVue API",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "studentvue-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target node",
+    "dev": "bun run src/index.ts",
+    "format": "bun run prettier --write \"src/**/*.ts\"",
+    "lint": "bun run eslint src",
+    "typecheck": "bun run tsc --noEmit",
+    "test": "bun test",
+    "quality-gates": "bun run format && bun run lint && bun run typecheck && bun test"
+  },
+  "keywords": [
+    "mcp",
+    "studentvue",
+    "education",
+    "api"
+  ],
+  "author": "studenvue",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+

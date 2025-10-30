@@ -1,18 +1,37 @@
-# StudentVue API Client
+# StudentVue Monorepo
 
-A comprehensive, type-safe Rust client library for the StudentVue SOAP API. Provides programmatic access to student information, grades, attendance, schedules, messages, and documents through the official StudentVue web services.
+A comprehensive StudentVue API implementation providing both a Rust library and a Model Context Protocol (MCP) server. Access student information, grades, attendance, messages, and more through native Rust or AI-powered applications.
 
-## Features
+## 📦 Packages
 
-- 15+ fully implemented API endpoints
+### [StudentVue Rust API](./packages/studentvue-api/)
+A type-safe Rust client library for the StudentVue SOAP API with 15+ fully implemented endpoints.
+
+**Key Features:**
 - Type-safe data models with proper error handling
 - Async/await support via Tokio runtime
 - Automatic SOAP envelope construction and XML parsing
 - Production-ready with comprehensive test coverage
 
-## Installation
+### [StudentVue MCP Server](./packages/studentvue-mcp/)
+A Model Context Protocol server that enables AI applications like Claude to access StudentVue data.
 
-Add this to your `Cargo.toml`:
+**Key Features:**
+- 15+ StudentVue API endpoints exposed as MCP tools
+- Built with the official MCP TypeScript SDK
+- Seamless integration with Claude Desktop and other MCP clients
+- Secure credential handling via environment variables
+
+## 🚀 Quick Start
+
+### Using the Rust API
+
+```bash
+cd packages/studentvue-api
+cargo build --release
+```
+
+Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
@@ -20,184 +39,222 @@ studenvue = "0.1.0"
 tokio = { version = "1.35", features = ["full"] }
 ```
 
-## Configuration
-
-Create a `.env` file in your project root with your credentials:
-
-```bash
-cp env.example .env
-# Edit .env with your actual credentials
-```
-
-Required environment variables:
-- `STUDENTVUE_PORTAL` - Your district's StudentVue portal URL
-- `STUDENTVUE_USERNAME` - Your student ID or username
-- `STUDENTVUE_PASSWORD` - Your StudentVue password
-
-## Quick Start
+Example usage:
 
 ```rust
 use studenvue::{StudentVueClient, Result};
-use std::env;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let portal = env::var("STUDENTVUE_PORTAL").expect("STUDENTVUE_PORTAL not set");
-    let username = env::var("STUDENTVUE_USERNAME").expect("STUDENTVUE_USERNAME not set");
-    let password = env::var("STUDENTVUE_PASSWORD").expect("STUDENTVUE_PASSWORD not set");
-
     let client = StudentVueClient::new(portal, username, password);
-
     let info = client.get_student_info().await?;
     println!("Student: {} (Grade {})", info.name, info.grade);
-
-    let courses = client.get_gradebook(None).await?;
-    println!("Enrolled in {} courses", courses.len());
-
     Ok(())
 }
 ```
 
-## API Reference
+### Using the MCP Server
+
+```bash
+cd packages/studentvue-mcp
+bun install
+bun run build
+```
+
+Configure with Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "studentvue": {
+      "command": "node",
+      "args": ["/path/to/studentvue/packages/studentvue-mcp/dist/index.js"],
+      "env": {
+        "STUDENTVUE_PORTAL": "https://your-district.edupoint.com",
+        "STUDENTVUE_USERNAME": "your_username",
+        "STUDENTVUE_PASSWORD": "your_password"
+      }
+    }
+  }
+}
+```
+
+Then ask Claude:
+- "What are my current grades?"
+- "Show me my attendance record"
+- "What messages do I have from teachers?"
+
+## 📋 Available API Methods
+
+Both packages provide access to the same StudentVue features:
 
 ### Student Information
-- `get_student_info()` - Retrieve student profile including name, grade, school, and contact information
-- `get_school_info()` - Retrieve school details including principal, address, and contact information
+- Get student profile (name, grade, school, contact info)
+- Get school information (principal, address, phone)
 
 ### Academic Records
-- `get_gradebook(report_period)` - Retrieve current grades, assignments, and course information
-- `get_class_schedule(term_index)` - Retrieve class schedule with periods, teachers, and room assignments
-- `get_calendar(date)` - Retrieve calendar events and upcoming assignments for a specific date
+- Get gradebook (grades, assignments, course info)
+- Get class schedule (periods, teachers, rooms)
+- Get calendar events
+- Get homework notes (district-dependent)
 
 ### Attendance
-- `get_attendance()` - Retrieve attendance records including absences, tardies, and reasons
+- Get attendance records (absences, tardies, reasons)
 
 ### Communication
-- `get_messages()` - Retrieve inbox messages from teachers and administrators
-- `mark_message_read(message_id, message_type)` - Mark a specific message as read
-- `get_message_attachment(attachment_gu)` - Download attachments from messages
+- Get messages from teachers/administrators
+- Mark messages as read
 
 ### Documents
-- `list_documents()` - List all available documents
-- `get_document(document_gu)` - Download a specific document by GUID
-- `list_report_cards()` - List available report cards by grading period
-- `get_report_card(document_gu)` - Download a specific report card
+- List available documents
+- Download specific documents
+- List and download report cards
 
 ### Health Records
-- `get_student_health_info(conditions, visits, immunizations)` - Retrieve student health information
+- Get student health information (conditions, visits, immunizations)
 
 ### Utilities
-- `get_districts_by_zip(zip_code)` - Search for school districts by ZIP code
-- `get_class_notes()` - Retrieve homework notes (district-dependent feature)
+- Search for school districts by ZIP code
 
-## Examples
+## 🛠️ Development
 
-### Getting Grades
+### Workspace Commands
 
-```rust
-let courses = client.get_gradebook(None).await?;
-for course in courses {
-    println!("Period {}: {}", course.period, course.title);
-    println!("  Teacher: {} ({})", course.staff, course.staff_email);
-    for mark in course.marks {
-        println!("  {}: {}", mark.mark_name, mark.score);
-    }
-}
-```
-
-### Checking Attendance
-
-```rust
-let absences = client.get_attendance().await?;
-for absence in absences {
-    println!("Date: {}", absence.date);
-    println!("Reason: {}", absence.reason);
-    for period in absence.periods {
-        println!("  Period {}: {} - {}", period.number, period.course, period.reason);
-    }
-}
-```
-
-### Getting Messages
-
-```rust
-let messages = client.get_messages().await?;
-for msg in messages {
-    println!("[{}] {}: {}", 
-        if msg.read { "READ" } else { "UNREAD" },
-        msg.from, 
-        msg.subject
-    );
-}
-```
-
-### Downloading Documents
-
-```rust
-let documents = client.list_documents().await?;
-if let Some(doc) = documents.first() {
-    let data = client.get_document(&doc.document_gu).await?;
-    let bytes = base64::decode(&data.base64_content)?;
-    std::fs::write(&doc.file_name, bytes)?;
-    println!("Downloaded: {}", doc.file_name);
-}
-```
-
-## Testing
-
-Set up environment variables in `.env` and run tests:
+From the repository root:
 
 ```bash
-cargo test
+make build          # Build all packages
+make test           # Run all tests
+make format         # Format all code
+make lint           # Run all linters
+make typecheck      # Run type checking
+make quality-gates  # Run all quality checks
+make clean          # Clean build artifacts
 ```
 
-All tests are integration tests that verify functionality against live API endpoints.
+### Per-Package Development
 
-## Development
-
+**Rust API:**
 ```bash
-make format        # Format code with rustfmt
-make lint          # Run clippy linter
-make typecheck     # Run type checking
-make test          # Run test suite
-make quality-gates # Run all checks
+cd packages/studentvue-api
+cargo build         # Build
+cargo test          # Test
+cargo fmt           # Format
+cargo clippy        # Lint
 ```
 
-## Finding Your District Portal
+**MCP Server:**
+```bash
+cd packages/studentvue-mcp
+bun run build       # Build
+bun test            # Test
+bun run format      # Format
+bun run lint        # Lint
+bun run typecheck   # Type check
+```
 
-Use the district lookup utility:
+## 🏗️ Project Structure
 
+```
+studentvue/
+├── packages/
+│   ├── studentvue-api/      # Rust API library
+│   │   ├── src/
+│   │   │   ├── client.rs    # Main client implementation
+│   │   │   ├── models.rs    # Data structures
+│   │   │   ├── soap.rs      # SOAP protocol handling
+│   │   │   └── error.rs     # Error types
+│   │   ├── tests/           # Integration tests
+│   │   └── examples/        # Usage examples
+│   │
+│   └── studentvue-mcp/      # MCP server
+│       ├── src/
+│       │   ├── index.ts              # MCP server implementation
+│       │   └── studentvue-client.ts  # StudentVue API client
+│       └── dist/            # Built artifacts
+│
+├── Cargo.toml               # Rust workspace config
+├── Makefile                 # Build automation
+└── README.md                # This file
+```
+
+## 🔒 Security Considerations
+
+**Important:** Never commit credentials to version control. Both packages use environment variables for authentication:
+
+- `STUDENTVUE_PORTAL` - Your district's StudentVue portal URL
+- `STUDENTVUE_USERNAME` - Your student ID or username
+- `STUDENTVUE_PASSWORD` - Your StudentVue password
+
+Always use `.env` files (which are gitignored) or secure credential management systems.
+
+## 🔍 Finding Your District Portal
+
+Use the district lookup utility available in both packages:
+
+**Rust:**
 ```rust
-let client = StudentVueClient::new(/* ... */);
 let districts = client.get_districts_by_zip("12345").await?;
-for district in districts {
-    println!("{}: {}", district.name, district.url);
-}
 ```
 
-Your district portal URL will typically follow the pattern `https://[district-name].edupoint.com` or similar.
+**MCP Server:**
+Ask Claude: "Find StudentVue districts for ZIP code 12345"
 
-## Documentation
+Your district portal URL typically follows the pattern `https://[district-name].edupoint.com`.
 
-This library implements the StudentVue SOAP API based on documented endpoints. For detailed API specifications, refer to the [StudentVue API documentation](https://github.com/StudentVue/docs).
+## 📖 Documentation
 
-## Security Considerations
+- [Monorepo Guide](./docs/MONOREPO_GUIDE.md) - Working with the monorepo
+- [Contributing Guide](./docs/CONTRIBUTING.md) - How to contribute
+- [Rust API Documentation](./packages/studentvue-api/README.md)
+- [MCP Server Documentation](./packages/studentvue-mcp/README.md)
+- [MCP Protocol Documentation](https://modelcontextprotocol.io/docs/getting-started/intro)
+- [StudentVue API Documentation](https://github.com/StudentVue/docs)
 
-**Important:** Never commit credentials to version control. Always use environment variables or a secure credential management system. Add `.env` to your `.gitignore` file.
+## 🧪 Testing
 
-## License
+Both packages include comprehensive test suites. Set up test credentials in `.env` files:
+
+```bash
+cd packages/studentvue-api && cargo test
+cd packages/studentvue-mcp && bun test
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see our [Contributing Guide](./docs/CONTRIBUTING.md) for details.
+
+All contributions must:
+1. Be formatted properly (rustfmt for Rust, Prettier for TypeScript)
+2. Pass all lints (clippy for Rust, ESLint for TypeScript)
+3. Pass all tests
+4. Include tests for new features
+
+## 📄 License
 
 MIT
 
-## Contributing
-
-Contributions are welcome. Please ensure all quality gates pass before submitting pull requests:
-- Code must be formatted with `rustfmt`
-- All clippy lints must pass
-- All tests must pass
-- New features should include tests
-
-## Acknowledgments
+## 🙏 Acknowledgments
 
 Based on reverse-engineering and documentation of the StudentVue SOAP API by the community.
 
+## 💡 Use Cases
+
+### For Developers (Rust API)
+- Build custom StudentVue integrations
+- Create mobile apps with native performance
+- Automate grade monitoring and notifications
+- Integrate with school management systems
+
+### For AI Applications (MCP Server)
+- Enable Claude to answer questions about grades
+- Get natural language summaries of attendance
+- Ask about upcoming assignments and events
+- Retrieve and explain report cards
+
+## 🔗 Resources
+
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [Claude Desktop](https://claude.ai/download)
+- [Rust Documentation](https://www.rust-lang.org/)
+- [Bun Runtime](https://bun.sh/)

@@ -1,12 +1,12 @@
-target/
+/target
 Cargo.lock
-**/*.rs.bk
-*.pdb
-.DS_Store
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.env
 
+.env
+.env.local
+.env.*.local
+
+*.log
+.DS_Store
+
+node_modules
+dist

@@ -1,31 +1,17 @@
-[package]
-name = "studenvue"
+[workspace]
+members = [
+    "packages/studentvue-api",
+]
+resolver = "2"
+
+[workspace.package]
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.70"
-authors = ["studenvue"]
 license = "MIT"
-description = "Rust client library for the StudentVue SOAP API"
-repository = "https://github.com/studenvue/studenvue"
-keywords = ["studentvue", "api", "soap", "education"]
-categories = ["api-bindings", "web-programming::http-client"]
-
-[dependencies]
-reqwest = { version = "0.11", features = ["cookies"] }
-tokio = { version = "1.35", features = ["full"] }
-quick-xml = { version = "0.31", features = ["serialize"] }
-thiserror = "1.0"
-base64 = "0.21"
-chrono = { version = "0.4", features = ["serde"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-
-[dev-dependencies]
-tokio-test = "0.4"
 
 [profile.release]
 opt-level = 3
 lto = true
 codegen-units = 1
 strip = true
-
