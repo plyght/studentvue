@@ -14,7 +14,7 @@ A Model Context Protocol (MCP) server that provides AI applications with access 
 
 ### Quick Install (Cursor IDE)
 
-[![Add StudentVue MCP server to Cursor](https://img.shields.io/badge/Add%20to-Cursor-blue?style=for-the-badge)](cursor://anysphere.cursor-deeplink/mcp/install?name=studentvue&config=eyJzdHVkZW50dnVlIjp7ImNvbW1hbmQiOiJub2RlIiwiYXJncyI6WyIvcGF0aC90by9zdHVkZW50dnVlL3BhY2thZ2VzL3N0dWRlbnR2dWUtbWNwL2Rpc3QvaW5kZXguanMiXSwiZW52Ijp7IlNUVURFTlRWVUVfUE9SVEFMIjoiaHR0cHM6Ly95b3VyLWRpc3RyaWN0LmVkdXBvaW50LmNvbSIsIlNUVURFTlRWVUVfVVNFUk5BTUUiOiJ5b3VyX3VzZXJuYW1lIiwiU1RVREVOVFZVRV9QQVNTV09SRCI6InlvdXJfcGFzc3dvcmQifX19)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=studentvue&config=eyJjb21tYW5kIjoibm9kZSIsImFyZ3MiOlsiL3BhdGgvdG8vc3R1ZGVudHZ1ZS9wYWNrYWdlcy9zdHVkZW50dnVlLW1jcC9kaXN0L2luZGV4LmpzIl0sImVudiI6eyJTVFVERU5UVlVFX1BPUlRBTCI6Imh0dHBzOi8veW91ci1kaXN0cmljdC5lZHVwb2ludC5jb20iLCJTVFVERU5UVlVFX1VTRVJOQU1FIjoieW91cl91c2VybmFtZSIsIlNUVURFTlRWVUVfUEFTU1dPUkQiOiJ5b3VyX3Bhc3N3b3JkIn19)
 
 Click the button above to install in Cursor, then update with your credentials.
 

@@ -1,10 +1,10 @@
 # StudentVue MCP Server Installation
 
-## Quick Install via Cursor Deeplink
+## Quick Install via Cursor
 
 Click the button below to install the StudentVue MCP server in Cursor:
 
-[![Add StudentVue MCP server to Cursor](https://img.shields.io/badge/Add%20to-Cursor-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiAxMkwxMiAyMkwyMiAxMkwxMiAyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+)](cursor://anysphere.cursor-deeplink/mcp/install?name=studentvue&config=eyJzdHVkZW50dnVlIjp7ImNvbW1hbmQiOiJub2RlIiwiYXJncyI6WyIvcGF0aC90by9zdHVkZW50dnVlL3BhY2thZ2VzL3N0dWRlbnR2dWUtbWNwL2Rpc3QvaW5kZXguanMiXSwiZW52Ijp7IlNUVURFTlRWVUVfUE9SVEFMIjoiaHR0cHM6Ly95b3VyLWRpc3RyaWN0LmVkdXBvaW50LmNvbSIsIlNUVURFTlRWVUVfVVNFUk5BTUUiOiJ5b3VyX3VzZXJuYW1lIiwiU1RVREVOVFZVRV9QQVNTV09SRCI6InlvdXJfcGFzc3dvcmQifX19)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=studentvue&config=eyJjb21tYW5kIjoibm9kZSIsImFyZ3MiOlsiL3BhdGgvdG8vc3R1ZGVudHZ1ZS9wYWNrYWdlcy9zdHVkZW50dnVlLW1jcC9kaXN0L2luZGV4LmpzIl0sImVudiI6eyJTVFVERU5UVlVFX1BPUlRBTCI6Imh0dHBzOi8veW91ci1kaXN0cmljdC5lZHVwb2ludC5jb20iLCJTVFVERU5UVlVFX1VTRVJOQU1FIjoieW91cl91c2VybmFtZSIsIlNUVURFTlRWVUVfUEFTU1dPUkQiOiJ5b3VyX3Bhc3N3b3JkIn19)
 
 **Important:** After installation, you must update the configuration with your actual credentials and file path.
 
@@ -56,18 +56,17 @@ Add to your Claude Desktop configuration file:
 1. Open Cursor Settings
 2. Navigate to Features > Model Context Protocol
 3. Click "Add MCP Server"
-4. Enter the configuration:
+4. Enter the server name: `studentvue`
+5. Enter the configuration:
 
 ```json
 {
-  "studentvue": {
-    "command": "node",
-    "args": ["/absolute/path/to/studentvue/packages/studentvue-mcp/dist/index.js"],
-    "env": {
-      "STUDENTVUE_PORTAL": "https://your-district.edupoint.com",
-      "STUDENTVUE_USERNAME": "your_username",
-      "STUDENTVUE_PASSWORD": "your_password"
-    }
+  "command": "node",
+  "args": ["/absolute/path/to/studentvue/packages/studentvue-mcp/dist/index.js"],
+  "env": {
+    "STUDENTVUE_PORTAL": "https://your-district.edupoint.com",
+    "STUDENTVUE_USERNAME": "your_username",
+    "STUDENTVUE_PASSWORD": "your_password"
   }
 }
 ```
@@ -175,29 +174,32 @@ Get-Content "$env:APPDATA\Claude\Logs\mcp*.log" -Wait
 
 To create a custom install link for your institution:
 
-1. Create your configuration JSON:
+1. Create your configuration JSON (server config only, without the server name wrapper):
 ```json
 {
-  "studentvue": {
-    "command": "node",
-    "args": ["/path/to/dist/index.js"],
-    "env": {
-      "STUDENTVUE_PORTAL": "https://your-district.edupoint.com",
-      "STUDENTVUE_USERNAME": "",
-      "STUDENTVUE_PASSWORD": ""
-    }
+  "command": "node",
+  "args": ["/path/to/dist/index.js"],
+  "env": {
+    "STUDENTVUE_PORTAL": "https://your-district.edupoint.com",
+    "STUDENTVUE_USERNAME": "",
+    "STUDENTVUE_PASSWORD": ""
   }
 }
 ```
 
 2. Base64 encode the JSON:
 ```bash
-echo -n '{"studentvue":{"command":"node","args":["/path/to/dist/index.js"],"env":{"STUDENTVUE_PORTAL":"https://your-district.edupoint.com","STUDENTVUE_USERNAME":"","STUDENTVUE_PASSWORD":""}}}' | base64
+echo -n '{"command":"node","args":["/path/to/dist/index.js"],"env":{"STUDENTVUE_PORTAL":"https://your-district.edupoint.com","STUDENTVUE_USERNAME":"","STUDENTVUE_PASSWORD":""}}' | base64
 ```
 
 3. Create the deeplink:
 ```
-cursor://anysphere.cursor-deeplink/mcp/install?name=studentvue&config=[BASE64_OUTPUT]
+https://cursor.com/en-US/install-mcp?name=studentvue&config=[BASE64_OUTPUT]
+```
+
+4. Create the markdown button:
+```markdown
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=studentvue&config=[BASE64_OUTPUT])
 ```
 
 ## Next Steps
